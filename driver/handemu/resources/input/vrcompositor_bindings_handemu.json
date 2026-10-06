@@ -1,0 +1,123 @@
+{
+	"action_manifest_version" : 0,
+	"alias_info" : {},
+	"app_key" : "openvr.component.vrcompositor",
+	"bindings" : {
+		"/actions/lasermouse" : {
+			"haptics" : [
+				{ "output" : "/actions/lasermouse/out/haptic", "path" : "/user/hand/left/output/haptic" },
+				{ "output" : "/actions/lasermouse/out/haptic", "path" : "/user/hand/right/output/haptic" }
+			],
+			"poses" : [
+				{ "output" : "/actions/lasermouse/in/Pointer", "path" : "/user/hand/left/pose/tip" },
+				{ "output" : "/actions/lasermouse/in/Pointer", "path" : "/user/hand/right/pose/tip" }
+			],
+			"sources" : [
+				{
+					"path" : "/user/hand/left/input/trigger",
+					"mode" : "button",
+					"parameters" : { "force_input" : "click" },
+					"inputs" : { "click" : { "output" : "/actions/lasermouse/in/leftclick" } }
+				},
+				{
+					"path" : "/user/hand/right/input/trigger",
+					"mode" : "button",
+					"parameters" : { "force_input" : "click" },
+					"inputs" : { "click" : { "output" : "/actions/lasermouse/in/leftclick" } }
+				},
+				{
+					"path" : "/user/hand/left/input/x",
+					"mode" : "button",
+					"inputs" : { "click" : { "output" : "/actions/lasermouse/in/home" } }
+				},
+				{
+					"path" : "/user/hand/left/input/y",
+					"mode" : "button",
+					"inputs" : { "click" : { "output" : "/actions/lasermouse/in/back" } }
+				},
+				{
+					"path" : "/user/hand/right/input/a",
+					"mode" : "button",
+					"inputs" : { "click" : { "output" : "/actions/lasermouse/in/home" } }
+				},
+				{
+					"path" : "/user/hand/right/input/b",
+					"mode" : "button",
+					"inputs" : { "click" : { "output" : "/actions/lasermouse/in/back" } }
+				},
+				{
+					"path" : "/user/hand/left/input/joystick",
+					"mode" : "joystick",
+					"inputs" : {
+						"position" : { "output" : "/actions/lasermouse/in/trackpadvalue" },
+						"touch" : { "output" : "/actions/lasermouse/in/trackpadtouch" }
+					}
+				},
+				{
+					"path" : "/user/hand/right/input/joystick",
+					"mode" : "joystick",
+					"inputs" : {
+						"position" : { "output" : "/actions/lasermouse/in/trackpadvalue" },
+						"touch" : { "output" : "/actions/lasermouse/in/trackpadtouch" }
+					}
+				}
+			]
+		},
+		"/actions/scroll_discrete" : {
+			"sources" : [
+				{
+					"path" : "/user/hand/left/input/joystick",
+					"mode" : "scroll",
+					"inputs" : { "scroll" : { "output" : "/actions/scroll_discrete/in/scroll" } }
+				},
+				{
+					"path" : "/user/hand/right/input/joystick",
+					"mode" : "scroll",
+					"inputs" : { "scroll" : { "output" : "/actions/scroll_discrete/in/scroll" } }
+				}
+			]
+		},
+		"/actions/scroll_smooth" : {
+			"sources" : [
+				{
+					"path" : "/user/hand/left/input/joystick",
+					"mode" : "scroll",
+					"parameters" : { "scroll_mode" : "smooth" },
+					"inputs" : { "scroll" : { "output" : "/actions/scroll_smooth/in/scroll" } }
+				},
+				{
+					"path" : "/user/hand/right/input/joystick",
+					"mode" : "scroll",
+					"parameters" : { "scroll_mode" : "smooth" },
+					"inputs" : { "scroll" : { "output" : "/actions/scroll_smooth/in/scroll" } }
+				}
+			]
+		},
+		"/actions/system" : {
+			"sources" : [
+				{
+					"path" : "/user/hand/left/input/system",
+					"mode" : "complex_button",
+					"inputs" : {
+						"single" : { "output" : "/actions/system/in/toggledashboard" },
+						"long" : { "output" : "/actions/system/in/showpowermenu" }
+					}
+				},
+				{
+					"path" : "/user/hand/right/input/system",
+					"mode" : "complex_button",
+					"inputs" : {
+						"single" : { "output" : "/actions/system/in/toggledashboard" },
+						"long" : { "output" : "/actions/system/in/showpowermenu" }
+					}
+				}
+			]
+		}
+	},
+	"category" : "steamvr_input",
+	"controller_type" : "handemu_hand",
+	"description" : "SteamVR dashboard: palm tap toggles it, index pinch clicks, ring pinch + move scrolls.",
+	"name" : "HandEmu dashboard bindings",
+	"options" : {},
+	"simulated_actions" : []
+}

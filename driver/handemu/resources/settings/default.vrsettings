@@ -1,0 +1,44 @@
+{
+	"driver_handemu" : {
+		"sourceControllerType" : "krvr_hand",
+		"forwardSystemButton" : true,
+		"palmTapEnable" : true,
+		"palmTapDistance" : 0.035,
+		"calibrationGesture" : true,
+		"calibrationHoldTime" : 1.5,
+		"debugLog" : true,
+
+		"pinchOn" : 0.012,
+		"pinchOff" : 0.020,
+		"nearOn" : 0.035,
+		"nearOff" : 0.045,
+		"analogFar" : 0.06,
+		"fingerMargin" : 0.008,
+
+		"fistOn" : 0.70,
+		"fistOff" : 0.55,
+		"fistIndexOn" : 0.25,
+		"fistThumbNear" : 0.045,
+		"fistFrames" : 4,
+
+		"smoothing" : 0.5,
+
+		"skeletonMode" : 1,
+		"skeletonFullRange" : true,
+		"fingerCurlGain" : 1.0,
+		"thumbCurlGain" : 1.0,
+		"maxBend" : 115.0,
+		"logBends" : false,
+
+		"joystickEnable" : true,
+		"joystickRadius" : 0.06,
+		"joystickDeadzone" : 0.15,
+
+		"posOffsetX" : 0.0,
+		"posOffsetY" : 0.0,
+		"posOffsetZ" : 0.0,
+		"rotOffsetX" : 0.0,
+		"rotOffsetY" : 0.0,
+		"rotOffsetZ" : 0.0
+	}
+}

@@ -1,0 +1,21 @@
+# Build output (build.bat / build_tests.bat)
+/build/
+/driver/handemu/bin/
+
+# Written by the running driver: live tuning and skeleton captures
+/driver/handemu/debug/
+
+# Third-party code: only the files the build needs are tracked
+/third_party/openvr/*
+!/third_party/openvr/LICENSE
+!/third_party/openvr/README.md
+!/third_party/openvr/headers/
+/third_party/openvr/headers/*
+!/third_party/openvr/headers/openvr_driver.h
+
+/third_party/minhook/*
+!/third_party/minhook/include/
+!/third_party/minhook/src/
+!/third_party/minhook/LICENSE.txt
+!/third_party/minhook/AUTHORS.txt
+!/third_party/minhook/README.md

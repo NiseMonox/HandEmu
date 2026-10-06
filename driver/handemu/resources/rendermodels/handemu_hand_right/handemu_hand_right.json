@@ -1,0 +1,102 @@
+{
+	"components": {
+		"base": {
+			"component_local": {
+				"origin": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"rotate_xyz": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		"tip": {
+			"component_local": {
+				"origin": [
+					0.043649,
+					0.003191,
+					0.075379
+				],
+				"rotate_xyz": [
+					-52.34,
+					-8.86,
+					0.0
+				]
+			}
+		},
+		"openxr_aim": {
+			"component_local": {
+				"origin": [
+					0.045655,
+					-0.003761,
+					0.056734
+				],
+				"rotate_xyz": [
+					-52.34,
+					-8.86,
+					0.0
+				]
+			}
+		},
+		"grip": {
+			"component_local": {
+				"origin": [
+					0.034038,
+					0.036503,
+					0.164722
+				],
+				"rotate_xyz": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		"handgrip": {
+			"component_local": {
+				"origin": [
+					0.034038,
+					0.036503,
+					0.164722
+				],
+				"rotate_xyz": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		"openxr_grip": {
+			"component_local": {
+				"origin": [
+					0.034038,
+					0.036503,
+					0.164722
+				],
+				"rotate_xyz": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		"openxr_handmodel": {
+			"component_local": {
+				"origin": [
+					0.034038,
+					0.036503,
+					0.164722
+				],
+				"rotate_xyz": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		}
+	}
+}

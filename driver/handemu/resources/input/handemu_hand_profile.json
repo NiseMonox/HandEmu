@@ -1,0 +1,122 @@
+{
+	"jsonid" : "input_profile",
+	"controller_type" : "handemu_hand",
+	"device_class" : "TrackedDeviceClass_Controller",
+	"resource_root" : "handemu",
+	"driver_name" : "handemu",
+	"hand_priority" : 100,
+	"input_bindingui_mode" : "controller_handed",
+	"should_show_binding_errors" : true,
+	"compatibility_mode_controller_type" : "oculus_touch",
+	"legacy_binding" : "{handemu}/input/legacy_bindings_handemu.json",
+	"default_bindings" : [
+		{
+			"app_key" : "openvr.component.vrcompositor",
+			"binding_url" : "vrcompositor_bindings_handemu.json"
+		},
+		{
+			"app_key" : "application.generated.unity.vam.exe",
+			"binding_url" : "bindings_handemu_vam.json"
+		},
+		{
+			"app_key" : "system.generated.vam.exe",
+			"binding_url" : "bindings_handemu_vam.json"
+		}
+	],
+	"input_source" : {
+		"/input/system" : {
+			"type" : "button",
+			"click" : true,
+			"touch" : true,
+			"order" : 0
+		},
+		"/input/trigger" : {
+			"type" : "trigger",
+			"value" : true,
+			"click" : true,
+			"touch" : true,
+			"order" : 1
+		},
+		"/input/joystick" : {
+			"type" : "joystick",
+			"click" : true,
+			"touch" : true,
+			"order" : 2
+		},
+		"/input/grip" : {
+			"type" : "trigger",
+			"value" : true,
+			"click" : true,
+			"touch" : true,
+			"order" : 3
+		},
+		"/input/a" : {
+			"type" : "button",
+			"side" : "right",
+			"click" : true,
+			"touch" : true,
+			"order" : 4
+		},
+		"/input/b" : {
+			"type" : "button",
+			"side" : "right",
+			"click" : true,
+			"touch" : true,
+			"order" : 5
+		},
+		"/input/x" : {
+			"type" : "button",
+			"side" : "left",
+			"click" : true,
+			"touch" : true,
+			"order" : 4
+		},
+		"/input/y" : {
+			"type" : "button",
+			"side" : "left",
+			"click" : true,
+			"touch" : true,
+			"order" : 5
+		},
+		"/input/thumbrest" : {
+			"type" : "button",
+			"click" : false,
+			"touch" : true
+		},
+		"/input/skeleton/left" : {
+			"type" : "skeleton",
+			"side" : "left",
+			"skeleton" : "/skeleton/hand/left"
+		},
+		"/input/skeleton/right" : {
+			"type" : "skeleton",
+			"side" : "right",
+			"skeleton" : "/skeleton/hand/right"
+		},
+		"/output/haptic" : {
+			"type" : "vibration"
+		},
+		"/pose/raw" : {
+			"type" : "pose"
+		},
+		"/pose/base" : {
+			"type" : "pose"
+		},
+		"/pose/handgrip" : {
+			"type" : "pose"
+		},
+		"/pose/tip" : {
+			"type" : "pose"
+		},
+		"/pose/openxr_aim" : {
+			"type" : "pose"
+		},
+		"/pose/openxr_grip" : {
+			"type" : "pose"
+		}
+	},
+	"mirror_mappings" : [
+		[ "/user/hand/left/input/x", "/user/hand/right/input/a" ],
+		[ "/user/hand/left/input/y", "/user/hand/right/input/b" ]
+	]
+}
