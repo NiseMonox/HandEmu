@@ -1,6 +1,6 @@
 // Rebuilds a source hand skeleton in SteamVR's own bone conventions.
 //
-// Games such as Virt-A-Mate read finger angles straight out of each bone's parent-space rotation,
+// Some games read finger angles straight out of each bone's parent-space rotation,
 // measured against SteamVR's reference hand, so they only work when every bone frame follows
 // Valve's layout (bone along +X on the left hand / -X on the right, curl about +Z). The source
 // driver's frames need not, so only its joint positions are trusted: each bone is re-aimed at its

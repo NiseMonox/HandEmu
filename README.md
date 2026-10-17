@@ -1,14 +1,14 @@
 # HandEmu
 
-A SteamVR driver that turns Apple Vision Pro hand tracking, streamed by KRVR, into emulated controllers. With it, games that only understand controllers can be played with bare hands. It was built for Virt-A-Mate (VaM) and works with other SteamVR games through Oculus Touch compatibility.
+A SteamVR driver that turns Apple Vision Pro hand tracking, streamed by KRVR, into emulated controllers. With it, games that only understand controllers can be played with bare hands. Games see Oculus Touch controllers, and a gesture-oriented binding is included for games that use SteamVR Input.
 
 Windows · SteamVR · current version 1.0.4
 
 ## Why
 
 - **KRVR does not emulate controllers.** It gives SteamVR one `krvr_hand` device per hand: a hand skeleton, a pinch trigger and a system gesture. That is deliberate. Hand tracking only works in games that read hands directly, such as VRChat.
-- **VaM cannot use those devices.** VaM uses SteamVR Input and ships bindings only for controllers (Vive, Touch, Index, WMR). With `krvr_hand` it has no binding, so the hands don't even get a position.
-- **Existing tools don't fit.** VaM's Leap Motion support and the Embody plugin need Leap hardware, and ALVR's gesture emulation only works when streaming through ALVR. A custom VaM binding for `krvr_hand` would expose a single button.
+- **Controller-only games cannot use those devices.** Many games use SteamVR Input and ship bindings only for controllers (Vive, Touch, Index, WMR). With `krvr_hand` they have no binding, so the hands don't even get a position.
+- **Existing tools don't fit.** Leap Motion based integrations need Leap hardware, and ALVR's gesture emulation only works when streaming through ALVR. A custom binding for `krvr_hand` would expose a single button.
 
 ## How it works
 
@@ -19,7 +19,7 @@ Vision Pro --KRVR--> krvr_hand devices in SteamVR (skeleton + pose + system gest
                  gesture recognition (pinch / fist / drag)
                            v
         two emulated handemu_hand controllers (Oculus Touch button layout)
-             |- VaM: a binding designed for hand gestures
+             |- SteamVR Input games: a binding designed for hand gestures
              '- other games: Oculus Touch compatibility mode
 ```
 
@@ -29,18 +29,18 @@ Vision Pro --KRVR--> krvr_hand devices in SteamVR (skeleton + pose + system gest
 
 ## Gestures
 
-| Gesture | Emulated input | In VaM |
+| Gesture | Emulated input | Typical use |
 |---|---|---|
-| Thumb + index **pinch** | Trigger | Click UI. Select the control node you point at. Pinch in empty space and drag to move the world (turn the wrist to rotate) |
-| Thumb **near** the index tip | Trigger touch | Show the pointer and control nodes |
-| **Fist** | Grip | Grab a node, up close or with the laser |
-| Thumb + middle pinch | A / X | Open or close the main menu (hold to move it) |
-| Thumb + pinky pinch | B / Y | Hold (toggle) grab |
+| Thumb + index **pinch** | Trigger | Click UI and select what you point at. In games that support it, pinch in empty space and drag to move the world (turn the wrist to rotate) |
+| Thumb **near** the index tip | Trigger touch | Show the pointer |
+| **Fist** | Grip | Grab, up close or with the laser |
+| Thumb + middle pinch | A / X | Open or close the game menu |
+| Thumb + pinky pinch | B / Y | Secondary action, such as toggling a held grab |
 | Thumb + ring pinch, **then move the hand** | Joystick | Free move relative to where you look (about 6 cm of travel is full deflection) |
 | **Tap the other palm with an index fingertip** (in and out within 1 s) | System | Open or close the SteamVR dashboard |
 | **Press the palms together and hold for 1.5 s** | — | Realign the hands after a Digital Crown recentre (see below) |
 
-VaM itself decides when a pinch drags the world. There is no drag while the laser points at UI or a highlighted control node is under the hand.
+The game decides what a pinch does. For example, a game may not drag the world while the laser points at UI.
 
 In the **SteamVR dashboard**:
 - index pinch: click;
@@ -62,17 +62,17 @@ Any game can be remapped in SteamVR's controller bindings.
 
 ## Finger skeleton
 
-VaM animates its hands from the SteamVR skeleton. It takes each finger bone's rotation relative to SteamVR's reference hand (the skeleton Valve Index controllers use) and splits it into bend, spread and twist angles. That only works when every bone frame follows SteamVR's conventions: bones run along +X on the left hand and -X on the right, and fingers curl about +Z.
+Some games animate their hands from the SteamVR skeleton. They take each finger bone's rotation relative to SteamVR's reference hand (the skeleton Valve Index controllers use) and split it into bend, spread and twist angles. That only works when every bone frame follows SteamVR's conventions: bones run along +X on the left hand and -X on the right, and fingers curl about +Z.
 
-KRVR's joint positions are accurate, but its bone frames do not follow that layout, the left hand least of all. Fed straight into VaM, the fingers bend the wrong way and the left thumb flips back and forth. HandEmu therefore uses only the joint positions and rebuilds both hands in SteamVR's conventions. Each bone starts from the reference pose and is turned onto the next joint by the smallest possible rotation. The joints stay exactly where KRVR reported them, and the bends land on the axes VaM expects.
+KRVR's joint positions are accurate, but its bone frames do not follow that layout, the left hand least of all. Fed straight into such a game, the fingers bend the wrong way and the left thumb flips back and forth. HandEmu therefore uses only the joint positions and rebuilds both hands in SteamVR's conventions. Each bone starts from the reference pose and is turned onto the next joint by the smallest possible rotation. The joints stay exactly where KRVR reported them, and the bends land on the axes games expect.
 
-SteamVR skeletons come in two motion ranges: "with controller" (fingers wrap around a controller) and "without controller" (full range). VaM's **Use controller hand pose** preference makes it read the first one, which only closes to a half fist. There is no controller in your hand, so HandEmu sends the full-range data for both ranges by default.
+SteamVR skeletons come in two motion ranges: "with controller" (fingers wrap around a controller) and "without controller" (full range). A game that reads the "with controller" range gets a hand that only closes to a half fist. There is no controller in your hand, so HandEmu sends the full-range data for both ranges by default.
 
 If a fist still looks too open in game, raise `fingerCurlGain`; see [Configuration](#configuration). It can be changed while SteamVR is running.
 
 ## Hand misalignment after a Digital Crown recentre
 
-Pressing and holding the Vision Pro's Digital Crown recentres the view. KRVR keeps the headset continuous, but the hands are then sent turned and shifted relative to the head. On test hardware the shift was 30.7° and 59 cm, so every hand in SteamVR and VaM ended up off target. KRVR notices this (its log says `frames turned apart - Crown recentre`) but does not correct it.
+Pressing and holding the Vision Pro's Digital Crown recentres the view. KRVR keeps the headset continuous, but the hands are then sent turned and shifted relative to the head. On test hardware the shift was 30.7° and 59 cm, so every hand in SteamVR and in game ended up off target. KRVR notices this (its log says `frames turned apart - Crown recentre`) but does not correct it.
 
 HandEmu **only records** such a jump in the background and never changes anything on its own. A jump is recorded when:
 - both hands leap at the same instant by the same horizontal rotation and shift, without changing height, while the head stays still; or
@@ -98,7 +98,7 @@ When the hands feel off, **press your palms together and hold for 1.5 s**, and t
    - Download `HandEmu-<version>.zip` from the [Releases](../../releases) page and unzip it somewhere permanent.
    - Build it by running `build.bat`, which writes `driver\handemu\bin\win64\driver_handemu.dll`.
 2. Close SteamVR and run `install.bat`. This registers the `driver\handemu` folder with SteamVR (through `vrpathreg`), so leave the folder where it is.
-3. Start SteamVR through KRVR as usual, then start VaM in OpenVR mode.
+3. Start SteamVR through KRVR as usual, then start your game.
 
 To uninstall, close SteamVR and run `uninstall.bat`.
 
@@ -126,7 +126,7 @@ Each "left" line has a matching "right" line.
 | No `handemu:` lines at all | The driver is not loaded. Check SteamVR → Settings → Startup / Shutdown → Manage Add-ons |
 | `Could not hook vrserver` | Hooking failed, probably because SteamVR changed its internal interfaces |
 | `starting`, but no `Hooked ... source skeleton` | No KRVR hands. Make sure KRVR is in hand-tracking mode |
-| `Emulated ... controller active`, but nothing happens in VaM | The binding was not applied. In SteamVR → Settings → Controllers → Manage Controller Bindings, pick VaM and choose "HandEmu hand gestures for VaM" |
+| `Emulated ... controller active`, but nothing happens in game | No binding is applied for the game. In SteamVR → Settings → Controllers → Manage Controller Bindings, pick the game and choose a HandEmu binding, or remap it yourself |
 
 ## Configuration
 
@@ -142,7 +142,7 @@ Defaults live in `driver\handemu\resources\settings\default.vrsettings`. To over
 | Key | Default | Meaning |
 |---|---|---|
 | `pinchOn` / `pinchOff` | 0.012 / 0.020 | Fingertip distance (m) below which a pinch starts, and above which it ends. KRVR reports 1–5 mm for a firm pinch |
-| `nearOn` / `nearOff` | 0.035 / 0.045 | "About to pinch" distance, which shows VaM's pointer. Spread the two values apart if the pointer flickers |
+| `nearOn` / `nearOff` | 0.035 / 0.045 | "About to pinch" distance, reported as trigger touch (games often show their pointer on it). Spread the two values apart if the pointer flickers |
 | `fingerMargin` | 0.008 | How much closer than the index a middle, ring or pinky fingertip must be to count as that finger's pinch |
 | `fistOn` / `fistOff` | 0.70 / 0.55 | Fist thresholds on the average curl (0–1) of the middle, ring and pinky fingers |
 | `fistIndexOn` / `fistThumbNear` | 0.25 / 0.045 | A fist also needs the index curled at least this much, or the thumb within this distance (m) of the index tip. Tracking often reports a straight index inside a fist |
@@ -169,9 +169,9 @@ The running driver watches a `debug` folder next to its resources (`driver\hande
 - **`live.txt`**: `key = value` lines for the skeleton keys above (`skeletonMode` through `logBends`). Changes apply within a second and are logged as `Live tuning: ...`. Delete the file to return to the defaults.
 - **`request.txt`**: write `name seconds` (for example `fist 3`). For that many seconds, the driver records KRVR's raw skeletons, the skeletons it sends and the hand poses into `name.csv`, then deletes the request.
 
-### In VaM
+### In game
 
-If the laser does not line up with the hand, adjust the SteamVR pointer angle in VaM's user preferences. If the hand model sits off the real hand, adjust the Motion Controller Hands position / rotation offsets.
+If the laser does not line up with the hand, adjust the game's pointer angle setting if it has one. If the hand model sits off the real hand, adjust the game's hand offset settings, or move the emulated controllers with `posOffset` / `rotOffset` above.
 
 ## Building and tests
 
@@ -190,7 +190,7 @@ If the laser does not line up with the hand, adjust the SteamVR pointer angle in
 
 ## Status
 
-Verified with a Vision Pro on SteamVR and VaM:
+Verified with a Vision Pro on SteamVR, in the dashboard and in a SteamVR Input game:
 - data flow and hand roles;
 - pinch, fist and joystick input;
 - palm tap opening the dashboard;
@@ -219,7 +219,7 @@ src\capture.cpp / capture.h                 debug folder: captures and live tuni
 src\vrmath.h                                vector / quaternion helpers
 tests\                                      fake vrserver and skeleton unit tests
 driver\handemu\                             the folder SteamVR loads
-  resources\input\                          controller profile, VaM / dashboard / legacy bindings
+  resources\input\                          controller profile, gesture / dashboard / legacy bindings
   resources\rendermodels\                   pose-only render models
   resources\settings\default.vrsettings     default settings
 third_party\                                OpenVR driver header and MinHook (see third_party\README.md)
@@ -230,7 +230,7 @@ third_party\                                OpenVR driver header and MinHook (se
 - [MinHook](https://github.com/TsudaKageyu/minhook) by Tsuda Kageyu (BSD 2-Clause) and the [OpenVR SDK](https://github.com/ValveSoftware/openvr) driver header by Valve (BSD 3-Clause), both bundled in `third_party`.
 - The hooking approach follows [OpenVR-SpaceCalibrator](https://github.com/pushrax/OpenVR-SpaceCalibrator).
 
-HandEmu is not affiliated with Apple, Valve, KRVR or Meshed VR. Product names belong to their owners.
+HandEmu is not affiliated with Apple, Valve or KRVR. Product names belong to their owners.
 
 ## License
 

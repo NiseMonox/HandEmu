@@ -1,6 +1,6 @@
 ﻿// HandEmu: turns hand-tracking skeletons published by another SteamVR driver (KRVR's "krvr_hand"
 // devices) into emulated Touch-style controllers, so games that only understand controllers
-// (Virt-A-Mate and friends) can be played with bare hands.
+// can be played with bare hands.
 //
 // SteamVR has no API for one driver to read another driver's input, so this driver hooks
 // IVRServerDriverHost::TrackedDevicePoseUpdated and a few IVRDriverInput calls inside vrserver
@@ -1398,8 +1398,8 @@ void OnSourceSkeleton( int side, vr::EVRSkeletalMotionRange range, const vr::VRB
 		g_alignment.Calibrate();
 
 	// There is no physical controller in the hand, so by default the unclamped data goes out for
-	// both motion ranges (games asking for "with controller", like VaM, would otherwise get a hand
-	// that can only half close).
+	// both motion ranges (games asking for "with controller" would otherwise get a hand that can
+	// only half close).
 	bool postSkeleton = true;
 	bool bothRanges = false;
 	if ( tuning.fullRange && sendsUnclamped )
